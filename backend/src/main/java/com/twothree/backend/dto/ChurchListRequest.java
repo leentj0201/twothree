@@ -1,0 +1,8 @@
+package com.twothree.backend.dto;
+
+import lombok.Data;
+
+@Data
+public class ChurchListRequest {
+    // 추후 페이징/필터 확장 가능. 현재는 비어 있음.
+} 
