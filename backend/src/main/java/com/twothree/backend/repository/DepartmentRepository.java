@@ -2,6 +2,7 @@ package com.twothree.backend.repository;
 
 import com.twothree.backend.entity.Department;
 import com.twothree.backend.enums.DepartmentStatus;
+import com.twothree.backend.enums.DepartmentCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,9 +18,9 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     
     List<Department> findByChurchIdAndStatus(Long churchId, DepartmentStatus status);
     
-    List<Department> findByParentDepartmentId(Long parentDepartmentId);
+    List<Department> findByCategoryAndChurchId(DepartmentCategory category, Long churchId);
     
-    List<Department> findByParentDepartmentIsNullAndChurchId(Long churchId);
+    List<Department> findByCategoryAndChurchIdAndStatus(DepartmentCategory category, Long churchId, DepartmentStatus status);
     
     Optional<Department> findByNameAndChurchId(String name, Long churchId);
     

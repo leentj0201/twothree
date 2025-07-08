@@ -3,13 +3,13 @@ package com.twothree.backend.controller;
 import com.twothree.backend.dto.DepartmentDto;
 import com.twothree.backend.entity.Department;
 import com.twothree.backend.service.DepartmentService;
+import com.twothree.backend.enums.DepartmentCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.twothree.backend.dto.ChurchIdRequest;
 import com.twothree.backend.dto.DepartmentListRequest;
-import com.twothree.backend.dto.ParentDepartmentIdRequest;
 import com.twothree.backend.dto.DepartmentIdRequest;
 import com.twothree.backend.dto.ChurchIdKeywordRequest;
 import com.twothree.backend.dto.DepartmentUpdateRequest;
@@ -43,15 +43,15 @@ public class DepartmentController {
         return ResponseEntity.ok(departments);
     }
     
-    @PostMapping("/root-by-church")
-    public ResponseEntity<List<DepartmentDto>> getRootDepartmentsByChurchId(@RequestBody ChurchIdRequest request) {
-        List<DepartmentDto> departments = departmentService.getRootDepartmentsByChurchId(request.getChurchId());
+    @PostMapping("/by-category")
+    public ResponseEntity<List<DepartmentDto>> getDepartmentsByCategory(@RequestBody ChurchIdRequest request, @RequestParam DepartmentCategory category) {
+        List<DepartmentDto> departments = departmentService.getDepartmentsByCategory(request.getChurchId(), category);
         return ResponseEntity.ok(departments);
     }
     
-    @PostMapping("/sub")
-    public ResponseEntity<List<DepartmentDto>> getSubDepartments(@RequestBody ParentDepartmentIdRequest request) {
-        List<DepartmentDto> departments = departmentService.getSubDepartments(request.getParentDepartmentId());
+    @PostMapping("/active-by-category")
+    public ResponseEntity<List<DepartmentDto>> getActiveDepartmentsByCategory(@RequestBody ChurchIdRequest request, @RequestParam DepartmentCategory category) {
+        List<DepartmentDto> departments = departmentService.getActiveDepartmentsByCategory(request.getChurchId(), category);
         return ResponseEntity.ok(departments);
     }
     

@@ -1,14 +1,15 @@
 package com.twothree.backend.dto;
 
 import com.twothree.backend.enums.DepartmentStatus;
+import com.twothree.backend.enums.DepartmentCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.twothree.backend.entity.Department;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -22,15 +23,14 @@ public class DepartmentDto {
     private String color;
     private String icon;
     private Long churchId;
-    private Long parentDepartmentId;
-    private List<DepartmentDto> subDepartments;
+    private DepartmentCategory category;
     private DepartmentStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;
     private String updatedBy;
     
-    public static DepartmentDto fromEntity(com.twothree.backend.entity.Department department) {
+    public static DepartmentDto fromEntity(Department department) {
         DepartmentDto dto = DepartmentDto.builder()
                 .id(department.getId())
                 .name(department.getName())
@@ -38,11 +38,7 @@ public class DepartmentDto {
                 .color(department.getColor())
                 .icon(department.getIcon())
                 .churchId(department.getChurch().getId())
-                .parentDepartmentId(department.getParentDepartment() != null ? department.getParentDepartment().getId() : null)
-                .subDepartments(department.getSubDepartments() != null ? 
-                    department.getSubDepartments().stream()
-                        .map(DepartmentDto::fromEntity)
-                        .collect(Collectors.toList()) : null)
+                .category(department.getCategory())
                 .status(department.getStatus())
                 .build();
         

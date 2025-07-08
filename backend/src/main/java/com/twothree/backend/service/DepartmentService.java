@@ -4,6 +4,7 @@ import com.twothree.backend.dto.DepartmentDto;
 import com.twothree.backend.entity.Church;
 import com.twothree.backend.entity.Department;
 import com.twothree.backend.enums.DepartmentStatus;
+import com.twothree.backend.enums.DepartmentCategory;
 import com.twothree.backend.repository.ChurchRepository;
 import com.twothree.backend.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,14 +41,14 @@ public class DepartmentService {
                 .collect(Collectors.toList());
     }
     
-    public List<DepartmentDto> getRootDepartmentsByChurchId(Long churchId) {
-        return departmentRepository.findByParentDepartmentIsNullAndChurchId(churchId).stream()
+    public List<DepartmentDto> getDepartmentsByCategory(Long churchId, DepartmentCategory category) {
+        return departmentRepository.findByCategoryAndChurchId(category, churchId).stream()
                 .map(DepartmentDto::fromEntity)
                 .collect(Collectors.toList());
     }
     
-    public List<DepartmentDto> getSubDepartments(Long parentDepartmentId) {
-        return departmentRepository.findByParentDepartmentId(parentDepartmentId).stream()
+    public List<DepartmentDto> getActiveDepartmentsByCategory(Long churchId, DepartmentCategory category) {
+        return departmentRepository.findByCategoryAndChurchIdAndStatus(category, churchId, DepartmentStatus.ACTIVE).stream()
                 .map(DepartmentDto::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -67,19 +68,13 @@ public class DepartmentService {
         Church church = churchRepository.findById(departmentDto.getChurchId())
                 .orElseThrow(() -> new RuntimeException("Church not found"));
         
-        Department parentDepartment = null;
-        if (departmentDto.getParentDepartmentId() != null) {
-            parentDepartment = departmentRepository.findById(departmentDto.getParentDepartmentId())
-                    .orElse(null);
-        }
-        
         Department department = Department.builder()
                 .name(departmentDto.getName())
                 .description(departmentDto.getDescription())
                 .color(departmentDto.getColor())
                 .icon(departmentDto.getIcon())
+                .category(departmentDto.getCategory())
                 .church(church)
-                .parentDepartment(parentDepartment)
                 .status(departmentDto.getStatus() != null ? departmentDto.getStatus() : DepartmentStatus.ACTIVE)
                 .build();
         
@@ -94,14 +89,7 @@ public class DepartmentService {
                     department.setDescription(departmentDto.getDescription());
                     department.setColor(departmentDto.getColor());
                     department.setIcon(departmentDto.getIcon());
-                    
-                    if (departmentDto.getParentDepartmentId() != null) {
-                        Department parentDepartment = departmentRepository.findById(departmentDto.getParentDepartmentId())
-                                .orElse(null);
-                        department.setParentDepartment(parentDepartment);
-                    } else {
-                        department.setParentDepartment(null);
-                    }
+                    department.setCategory(departmentDto.getCategory());
                     
                     if (departmentDto.getStatus() != null) {
                         department.setStatus(departmentDto.getStatus());
