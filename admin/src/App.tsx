@@ -1,20 +1,30 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header'; // Removed extension
-import ContentRegistrationPage from './pages/ContentRegistrationPage'; // Removed extension
-import ContentListPage from './pages/ContentListPage'; // Removed extension
+import { Provider } from 'react-redux';
+import { store } from './store';
+import Header from './components/Header';
+import NotificationContainer from './components/NotificationContainer';
+import HomePage from './pages/HomePage';
+import ChurchListPage from './pages/ChurchListPage';
+import './App.css';
 
-const App: React.FC = () => { // Added React.FC type
+function App() {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/admin/contents/register" element={<ContentRegistrationPage />} /> {/* Path and element renamed */}
-        <Route path="/admin/contents" element={<ContentListPage />} /> {/* Path and element renamed */}
-        {/* Add other routes here */}
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <Header />
+          <NotificationContainer />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/churches" element={<ChurchListPage />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </Provider>
   );
-};
+}
 
 export default App;

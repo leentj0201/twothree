@@ -80,23 +80,5 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 
-    @Transactional
-    public UserDto.UserInfo signUp(UserDto.SignUpRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
-        }
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-
-        User user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .email(request.getEmail())
-                .fullName(request.getFullName())
-                .role(request.getRole() != null ? request.getRole() : User.Role.USER)
-                .build();
-        User savedUser = userRepository.save(user);
-        return UserDto.UserInfo.from(savedUser);
-    }
+    
 }

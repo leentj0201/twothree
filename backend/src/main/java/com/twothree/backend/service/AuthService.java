@@ -2,6 +2,7 @@ package com.twothree.backend.service;
 
 import com.twothree.backend.dto.UserDto;
 import com.twothree.backend.entity.User;
+import com.twothree.backend.domain.service.UserRegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserService userService;
+    private final UserRegistrationService userRegistrationService;
     
     public UserDto.SignInResponse signIn(UserDto.SignInRequest request) {
         Authentication authentication = authenticationManager.authenticate(
@@ -31,7 +33,7 @@ public class AuthService {
     }
     
     public UserDto.SignInResponse signUp(UserDto.SignUpRequest request) {
-        UserDto.UserInfo userInfo = userService.signUp(request);
+        UserDto.UserInfo userInfo = userRegistrationService.signUp(request);
         
         User user = User.builder()
                 .id(userInfo.getId())

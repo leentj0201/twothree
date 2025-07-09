@@ -1,20 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Header: React.FC = () => { // Added React.FC type
+const Header: React.FC = () => {
   return (
-    <header style={{ padding: '20px', background: '#f0f0f0', borderBottom: '1px solid #ccc' }}>
-      <nav>
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', gap: '20px' }}>
-          <li>
-            <Link to="/admin/contents/register">콘텐츠 등록</Link> {/* Text and path renamed */}
-          </li>
-          <li>
-            <Link to="/admin/contents">콘텐츠 목록</Link> {/* Text and path renamed */}
-          </li>
-          {/* Add other navigation links here */}
-        </ul>
-      </nav>
+    <header style={{ 
+      padding: '20px', 
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+      borderBottom: '1px solid #ccc',
+      color: 'white'
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+          교회 관리 시스템
+        </div>
+        <nav>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', gap: '20px' }}>
+            <li>
+              <Link to="/admin/churches" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+                교회 관리
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/contents" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+                콘텐츠 관리
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/contents/register" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+                콘텐츠 등록
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
 };

@@ -18,6 +18,21 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 2000ms
+  cache:
+    type: redis
+    redis:
+      time-to-live: 1800000 # 30분
+  batch:
+    job:
+      enabled: false # 배치 작업 비활성화 (필요시 활성화)
+  task:
+    scheduling:
+      pool:
+        size: 5
 
 application:
   security:
@@ -33,4 +48,19 @@ server:
 logging:
   level:
     com.twothree.backend: DEBUG
-    org.springframework.security: DEBUG 
+    org.springframework.security: DEBUG
+    org.springframework.cache: DEBUG
+    org.springframework.batch: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true 
