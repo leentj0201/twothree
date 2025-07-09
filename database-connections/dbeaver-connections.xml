@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connections>
+  <!-- H2 개발 환경 연결 -->
+  <connection id="twothree-h2-dev" type="H2" name="Twothree H2 (Dev)">
+    <configuration>
+      <driver>h2</driver>
+      <url>jdbc:h2:mem:testdb</url>
+      <username>sa</username>
+      <password></password>
+      <properties>
+        <property name="MODE" value="PostgreSQL"/>
+        <property name="DB_CLOSE_DELAY" value="-1"/>
+        <property name="DB_CLOSE_ON_EXIT" value="FALSE"/>
+        <property name="AUTO_SERVER" value="TRUE"/>
+      </properties>
+    </configuration>
+    <folders>
+      <folder name="Twothree Queries" type="sql"/>
+    </folders>
+  </connection>
+
+  <!-- PostgreSQL 프로덕션 환경 연결 -->
+  <connection id="twothree-postgres-prod" type="PostgreSQL" name="Twothree PostgreSQL (Prod)">
+    <configuration>
+      <driver>postgresql</driver>
+      <url>jdbc:postgresql://localhost:5432/twothree_db</url>
+      <username>twothree_user</username>
+      <password>twothree_password</password>
+      <properties>
+        <property name="ApplicationName" value="Twothree"/>
+        <property name="DefaultRowPrefetch" value="50"/>
+        <property name="UseServerSidePrepare" value="true"/>
+        <property name="ssl" value="false"/>
+        <property name="sslmode" value="disable"/>
+      </properties>
+    </configuration>
+    <folders>
+      <folder name="Twothree Queries" type="sql"/>
+      <folder name="Analytics" type="sql"/>
+      <folder name="Maintenance" type="sql"/>
+    </folders>
+  </connection>
+</connections> 

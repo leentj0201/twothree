@@ -2,10 +2,10 @@ spring:
   application:
     name: twothree-backend
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/twothree}
+    url: jdbc:postgresql://localhost:5432/twothree_db
     driver-class-name: org.postgresql.Driver
-    username: ${DATABASE_USERNAME:postgres}
-    password: ${DATABASE_PASSWORD:password}
+    username: twothree_user
+    password: twothree_password
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,22 +13,20 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: false
+        format_sql: true
 
 application:
   security:
     jwt:
-      secret-key: ${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-      expiration: ${JWT_EXPIRATION:86400000}
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # 24 hours
       refresh-token:
-        expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+        expiration: 604800000 # 7 days
 
 server:
-  port: ${PORT:8080}
+  port: 8080
 
 logging:
   level:
     com.twothree.backend: INFO
-    org.springframework.security: INFO
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n" 
+    org.springframework.security: INFO 

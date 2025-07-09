@@ -3,11 +3,17 @@ package com.twothree.backend.controller;
 import com.twothree.backend.dto.ChurchDto;
 import com.twothree.backend.enums.ChurchStatus;
 import com.twothree.backend.service.ChurchService;
+import com.twothree.backend.service.ChurchExcelService; // Added
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource; // Added
+import org.springframework.http.HttpHeaders; // Added
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType; // Added
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.twothree.backend.dto.ChurchListRequest;
+import java.io.IOException; // Added
+import java.io.ByteArrayOutputStream; // Added
 import com.twothree.backend.dto.ChurchIdRequest;
 import com.twothree.backend.dto.ChurchNameRequest;
 import com.twothree.backend.dto.ChurchStatusRequest;
@@ -24,11 +30,44 @@ import java.util.List;
 public class ChurchController {
     
     private final ChurchService churchService;
-    
+    private final ChurchExcelService churchExcelService; // Added
+
     @PostMapping("/list")
     public ResponseEntity<List<ChurchDto>> getAllChurches(@RequestBody(required = false) ChurchListRequest request) {
         List<ChurchDto> churches = churchService.getAllChurches();
         return ResponseEntity.ok(churches);
+    }
+
+    @GetMapping("/excel") // New endpoint for Excel download
+    public ResponseEntity<ByteArrayResource> downloadChurchExcel() throws IOException {
+        List<ChurchDto> churches = churchService.getAllChurches(); // Get all churches
+        ByteArrayOutputStream excelStream = churchExcelService.generateChurchExcel(
+                churches.stream()
+                        .map(churchDto -> {
+                            // Convert ChurchDto to Church entity for Excel generation
+                            // This is a simplified conversion. In a real app, you might have a dedicated mapper.
+                            return com.twothree.backend.entity.Church.builder()
+                                    .id(churchDto.getId())
+                                    .name(churchDto.getName())
+                                    .address(churchDto.getAddress())
+                                    .phone(churchDto.getPhone())
+                                    .email(churchDto.getEmail())
+                                    .website(churchDto.getWebsite())
+                                    .pastorName(churchDto.getPastorName())
+                                    .pastorPhone(churchDto.getPastorPhone())
+                                    .pastorEmail(churchDto.getPastorEmail())
+                                    .status(churchDto.getStatus())
+                                    .build();
+                        })
+                        .collect(java.util.stream.Collectors.toList())
+        );
+
+        ByteArrayResource resource = new ByteArrayResource(excelStream.toByteArray());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=churches.xlsx")
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(resource);
     }
     
     @PostMapping("/get")

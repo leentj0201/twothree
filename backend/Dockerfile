@@ -26,4 +26,4 @@ RUN ./gradlew build -x test --no-daemon
 EXPOSE 8080
 
 # Run the application with profile support
-CMD ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE:-default}", "-jar", "build/libs/twothree-backend-0.0.1-SNAPSHOT.jar"] 
+CMD ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE:-default}", "-jar", "build/libs/twothree-backend-0.0.1-SNAPSHOT.jar"]
